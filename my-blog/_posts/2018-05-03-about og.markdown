@@ -1,0 +1,35 @@
+---
+layout: post
+title:  "SEO 新属性 OG"
+date:   2018-05-03 10:46:02 +0800
+categories: seo update
+---
+现在我们来梳理一下开放协议实现流程：
+
+就是当用户使用jiathis或者百度分享等分享类插件工具，将网页分享到facebook、twitter或者微博的时候，sns网站中的内容是按照我们og属性规定内容呈现的，以此保证信息分享更准确更符合作者所想。
+
+更通俗的理解：如果你分享我的网页到其他网站（sns），那我就告诉你分享的内容标题是什么、缩略图是什么、内容简介是什么，你可别给我胡整，得按我说的来。
+
+那么og属性对于seo意义呢：
+
+都知道搜索引擎机器人爬取的是我们的页面，即html代码，meta信息尤为关注，所以我们增加的og meta标签是可以别搜索引擎发现并评估权重的，也就是说你将原有meta信息优化手段同时使用到og:title这种属性值当中，加强meta信息优化内容；对于权重提升和排名还是很有利的。
+
+实现手段：
+
+如果你对og属性没有特殊要求，即基本包含页面的标题、简介等，那么只需要将title和description的信息与og属性信息一致就可以了，如dedecms模板中使用：
+```
+<meta property=”og:title” content=”{dede:field.title/} ” />
+```
+（{dede:field.title/}是dedecms页面title调用标签）；
+
+如果想完全自定义og属性，如增加视频链接、尺寸长宽等，那么需要单独增加字段进行调用了（涉及到程序二次开发，这里不说了）
+
+注意事项：
+
+1、 如果你发现使用seo检测工具检测到Meta Property=og报错，别管它，没事儿。这种操作是有利于seo的，是工具没见过世面。
+
+2、 调整模板代码的时候，写了<meta property=”og:description”同样要写<META name=”Description”，两种属性不同，要单独使用。
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
