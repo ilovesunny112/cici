@@ -37,7 +37,7 @@ SurveyBot|216.145.5.42 64.246.165.160
 Yanga WorldSearch Bot v|77.91.224.19 91.205.124.19
 baiduspider-mobile-gate|220.181.5.34 61.135.166.31
 discobot|208.96.54.70
-ia_archiver	209.234.171.42
+ia_archiver|209.234.171.42
 msnbot|65.55.104.209 65.55.209.86 65.55.209.96
 sogou in spider|220.181.19.216
 
