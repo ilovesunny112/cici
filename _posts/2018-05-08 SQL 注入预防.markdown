@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "预防SQL 注入"
+date:   2018-05-08 23:02:02 +0800
+categories: SEO spider
+---
+SQL 注入老生常谈，一般是由于对 输入没有检测 导致的。 主要分为
+
+* 数字注入
+* 字符串注入
+ 
+
+待续...
+
+ 
+
+ 
+
+
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
