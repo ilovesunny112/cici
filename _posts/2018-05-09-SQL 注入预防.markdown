@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "预防SQL 注入"
+title:  "预防 SQL 注入"
 date:   2018-05-09 09:41:02 +0800
 categories: SQL
 ---
