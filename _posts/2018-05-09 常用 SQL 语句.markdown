@@ -1,0 +1,38 @@
+---
+layout: post
+title:  "预防SQL 注入"
+date:   2018-05-09 09:41:02 +0800
+categories: SQL
+---
+常用语句积累
+
+
+
+* select distinct city from table
+* SELECT * FROM Persons WHERE City LIKE 'N%'
+ 
+```sql
+ SELECT distinct city from table WHERE ABB = "ABCDE"
+```
+
+ 
+```sql
+ SELECT * FROM Persons WHERE City LIKE 'N%'
+
+ SELECT * FROM Persons
+ WHERE City LIKE '%lon%'
+
+ SELECT * FROM Persons
+ WHERE City NOT LIKE '%lon%'
+```
+待续...
+
+ 
+
+ 
+
+
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
