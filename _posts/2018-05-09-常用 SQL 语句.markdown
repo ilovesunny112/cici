@@ -10,8 +10,10 @@ categories: SQL
 
 * select distinct city from table
 * SELECT * FROM Persons WHERE City LIKE 'N%'
+* insert T_users (name,pw,age,salt) values ('sunny','fdsalkdsau812jfdajh',11,'fdas751j51908')
  
 ```sql
+insert T_users (name,pw,age,salt) values ('sunny','fdsalkdsau812jfdajh',11,'fdas751j51908')
  SELECT distinct city from table WHERE ABB = "ABCDE"
 ```
 

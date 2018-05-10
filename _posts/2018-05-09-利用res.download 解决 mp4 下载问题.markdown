@@ -1,0 +1,36 @@
+---
+layout: post
+title:  "MP4 自动打开怎么办?"
+date:   2018-05-10 11:41:02 +0800
+categories: Nodejs
+---
+最近项目遇到一个需求,需要对 MP4 进行下载处理.但是服务器返回的 视频文件 自动会被浏览器打开,如何解决下载问题呢. 
+
+查找了很多资料,发现 Nodejs 的 res.download 专门为此设计. 如果有类似需求可以用来试试. 
+
+语法如下:
+
+ 
+```JavaScript
+ res.download('/xxx.pdf','dl.pdf',function(err){
+	if(err){
+	//如何如何
+
+	}
+
+ 	})
+```
+功能不错,缺点貌似是 可下载的文件必须是 本服务器上的文件,如果是外面的文件貌似不可以. 
+
+
+待续...
+
+ 
+
+ 
+
+
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
