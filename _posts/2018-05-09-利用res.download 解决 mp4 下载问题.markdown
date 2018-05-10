@@ -15,10 +15,8 @@ categories: Nodejs
  res.download('/xxx.pdf','dl.pdf',function(err){
 	if(err){
 	//如何如何
-
 	}
-
- 	})
+})
 ```
 功能不错,缺点貌似是 可下载的文件必须是 本服务器上的文件,如果是外面的文件貌似不可以. 
 
