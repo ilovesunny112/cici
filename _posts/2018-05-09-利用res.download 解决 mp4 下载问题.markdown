@@ -23,6 +23,27 @@ categories: Nodejs
 
 待续...
 
+
+11:16 update
+
+我们这个场景有点怪,用 nodejs 做了反向代理, 结果 发现 res.download 根本不认反向代理的 路径,(猜测反向代理必须是 用户自己发起的 才能算是反向代理?) 
+
+anyway, 最后尝试在做反向代理前 做了拦截, 设置了一下 header. 解决了问题. 不过 大文件的代理,需要服务器的等级会比较高. 
+
+代码如下:
+
+
+
+```js
+app.use('/getvd',function(req,res,next){
+	res.set("Content-Disposition","attachment")
+	next()
+})
+```
+
+
+
+
  
 
  
