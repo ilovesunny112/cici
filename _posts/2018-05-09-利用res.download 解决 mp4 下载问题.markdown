@@ -11,7 +11,7 @@ categories: Nodejs
 语法如下:
 
  
-```JavaScript
+```javascript
  res.download('/xxx.pdf','dl.pdf',function(err){
 	if(err){
 	//如何如何
