@@ -1,0 +1,191 @@
+---
+layout: post
+title:  "Javascript 不完全函数栗子"
+date:   2018-06-02 22:55:02 +0800
+categories: Javascript
+---
+Javascript 权威指南 正则部分笔记：
+
+**直接量字符**
+-	\o	NUL 字符
+-	\t	制表符
+-	\n	换行
+-	\v	垂直换行
+-	\f	换页符
+-	\r	回车符
+-	\xnn	16进制拉丁字符
+-	\nxxxx	16进制Unicode字符
+
+ **其他含有特殊含义字符**
+-	^	开始 或者 否
+-	$	结尾
+-	.	任何字符
+-	\*	0个或多个
+-	\+	1个或多个
+-	?	0个或1个
+-	=	未知
+
+**正则匹配的字符类**
+-	[...]	方括号内部的任意字符 格式有可能是 a-zA-Z1-9
+-	[^...]	方括号内部的任意字符之外的字符
+-	.	除换行符和其他 Unicode行终止符之外的任意字符
+-	\w	任意ASCII字符组成的单词，等价于[a-zA-Z0-9]
+-	\W	任意不是ASCII字符组成的单词 等价于[^a-zA-Z0-9]
+-	\s	空白字符
+-	\S	非空白字符的字符
+-	\D	非数字之外的字符
+-	\d	数字符
+
+-	[\b]	退格直接量（特例）？
+
+**量词**
+-	{n,m}	匹配前面最少n次 最多m次
+-	{n,}	匹配前面最少 n次
+-	{n}	匹配前面n次
+-	？	匹配前面0次或者 1次
+-	\+	匹配前面1次或者多次
+-	\*	匹配前面0次或者多次
+
+
+正则是 贪婪匹配 
+比如 a+ 能匹配多少个 a 字符 就全部匹配上， 如果不希望 贪婪匹配  那么可以写成 a+? 
+
+# 选择 分组 和 引用 
+/ab|cd|ef/
+
+/\d{3}|[a-z]{4}/
+
+/java(script)?/	即可匹配 java 也可匹配 javascript
+
+
+圆括号的作用之一 是定义子模式 
+
+比如 /[a-z]+\d+/,  我们关心 后面匹配的数字到底是多少 这个时候 \d+ 可以用 括号围起来 /[a-z]+(\d+)/
+
+圆括号用途之二 可以用序列号 在后面进行引用  比如场景 替换 双引号
+
+/["'][^'"]*["']/， 无法判断开始 到底是单引号还是双引号 
+
+可以改写成 /(["'])[^"']*\1/
+
+会多有个括号嵌套的情况出现，那么怎么判断序列号： 序列号就是 最左测括号出现的 顺序
+
+特殊情况括号如下
+(?:...)
+这种情况这个子表达式不计入 序列号 
+
+**正则表达式中的 锚字符**
+
+-	^	匹配字符串 开头 在多行检索中匹配一行的开头
+-	$	匹配字符串结尾  在多行检索中 匹配一行的结尾
+-	\b	匹配单词边界 简言之 就是 \w 和 \W 之间的位置 或者位于 \w 和字符串的开头或者结尾之间的位置 
+-	\B	匹配非单词边界的位置
+-	(?=p)	零宽正向先行断言	要求接下来的字符都与p匹配，但不能包括匹配p的那些字符
+-	(?!p)	零宽负向先行断言	要求接下来的字符不与p匹配
+
+/ab(?=c+)/
+
+**修饰符 i g **
+
+# String 的 一些相关方法 
+replace, search, match 
+
+match 方法 是 最常用  返回一个 数组  如果 正则表达式 是 g 模式 那么返回全部匹配结果
+```js
+“1 plus 2 equals 3".match(/\d+/g)  //=>["1"，"2"，"3"]
+```
+
+例子 解析 字符串里的 URL 
+
+```js
+<script>
+        var str = "welcome to https://www.microsoft.com/china/cases-tudies?id=aaa, it is perfect"
+
+        var urlReg = /(\w+:)\/\/([\w.]+)\/([\S\/]+)/
+
+        var result = str.match(urlReg)
+        
+        console.log(result)
+        
+        var obj = {
+
+        }
+        obj.protocol = result[1];
+        obj.domain = result[2]
+        obj.path = result[3]
+        
+        console.log(obj)
+
+    </script>
+
+```
+
+# RegExp 对象 
+可以通过 RegExp 生命初始化一个 正则变量， 但要注意的是 \ 的处理 “\\d+” 这样写  因为在字符串里 如果想 输出\ 那么也需要转义 也就是 "\\"
+
+btw, 同样可以通过 eval 生成正则 强烈不推荐
+
+**RegExp 的属性**
+
+每个 RegExp 实例包含5个属性 
+```js
+	{
+			source:"只读字符串",
+			global:true，//只读布尔值 代表是否 有g 修饰符
+			inoreCase:true, //只读 是否有i指示符
+			multiline:true,//只读 代表是否有 m 
+			lastIndex:10 这个属性存储  在字符串中下一次 检索开始的位置  涉及到 exec 方法 和 test 方法
+		
+		}
+
+```
+
+**RegExp 的方法**
+
+.exec
+
+	连续多次调用 lastIndex 属性会更新 直到最后 为false lastIndex 更新为 0  ？ 如果不同字符串呢？
+.test
+
+	连续多次调用 lastIndex 属性会更新，最后为 false 然后更新为 0 
+
+由于 lastIndex 的存在 导致非常有趣的现象出现 如下 
+
+```js
+var pattern = /cd/g
+var a = "abcdedfjhlkjabcedcdefdcdd"
+
+
+pattern.test(a)//true
+
+pattern.lastIndex // 4
+
+var str2 = "acdaaaacdaaacdddd"
+
+pattern.test(str2)// true 
+pattern.lastIndex //9
+
+str3 = "acd"
+pattern.test(str3)//false 这里居然是false
+pattern.lastIndex //恢复为0 
+
+```
+
+
+
+
+待续...
+
+
+
+
+
+ 
+
+ 
+
+
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
