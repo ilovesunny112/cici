@@ -92,13 +92,13 @@ replace, search, match
 
 match 方法 是 最常用  返回一个 数组  如果 正则表达式 是 g 模式 那么返回全部匹配结果
 ```js
-“1 plus 2 equals 3".match(/\d+/g)  //=>["1"，"2"，"3"]
+"1 plus 2 equals 3".match(/\d+/g)  //=>["1"，"2"，"3"]
 ```
 
 例子 解析 字符串里的 URL 
 
 ```js
-<script>
+
         var str = "welcome to https://www.microsoft.com/china/cases-tudies?id=aaa, it is perfect"
 
         var urlReg = /(\w+:)\/\/([\w.]+)\/([\S\/]+)/
@@ -115,8 +115,6 @@ match 方法 是 最常用  返回一个 数组  如果 正则表达式 是 g �
         obj.path = result[3]
         
         console.log(obj)
-
-    </script>
 
 ```
 
@@ -145,6 +143,7 @@ btw, 同样可以通过 eval 生成正则 强烈不推荐
 .exec
 
 	连续多次调用 lastIndex 属性会更新 直到最后 为false lastIndex 更新为 0  ？ 如果不同字符串呢？
+	
 .test
 
 	连续多次调用 lastIndex 属性会更新，最后为 false 然后更新为 0 
