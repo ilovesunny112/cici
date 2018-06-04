@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Javascript 权威指南正则笔记"
-date:   2018-06-02 16:28:02 +0800
+date:   2018-06-04 16:28:02 +0800
 categories: Javascript RegExp
 ---
 Javascript 权威指南 正则部分笔记：
