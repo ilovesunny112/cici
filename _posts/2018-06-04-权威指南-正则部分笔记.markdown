@@ -129,10 +129,10 @@ btw, 同样可以通过 eval 生成正则 强烈不推荐
 ```js
 	{
 			source:"只读字符串",
-			global:true，//只读布尔值 代表是否 有g 修饰符
+			global:true,//只读布尔值 代表是否 有g 修饰符
 			inoreCase:true, //只读 是否有i指示符
 			multiline:true,//只读 代表是否有 m 
-			lastIndex:10 这个属性存储  在字符串中下一次 检索开始的位置  涉及到 exec 方法 和 test 方法
+			lastIndex:10 //这个属性存储  在字符串中下一次 检索开始的位置  涉及到 exec 方法 和 test 方法
 		
 		}
 
