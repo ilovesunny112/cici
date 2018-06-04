@@ -53,7 +53,7 @@ Javascript 权威指南 正则部分笔记：
 # 选择 分组 和 引用 
 /ab|cd|ef/
 
-/\d{3}|[a-z]{4}/
+/\d{3}\|[a-z]{4}/
 
 /java(script)?/	即可匹配 java 也可匹配 javascript
 
@@ -143,7 +143,7 @@ btw, 同样可以通过 eval 生成正则 强烈不推荐
 .exec
 
 	连续多次调用 lastIndex 属性会更新 直到最后 为false lastIndex 更新为 0  ？ 如果不同字符串呢？
-	
+
 .test
 
 	连续多次调用 lastIndex 属性会更新，最后为 false 然后更新为 0 
