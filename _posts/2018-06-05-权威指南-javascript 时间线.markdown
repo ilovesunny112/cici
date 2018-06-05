@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Javascript 权威指南正则笔记"
+title:  "Javascript 页面加载时间线"
 date:   2018-06-05 16:43:02 +0800
 categories: Javascript RegExp
 ---
