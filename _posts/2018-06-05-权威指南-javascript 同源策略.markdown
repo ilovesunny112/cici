@@ -25,7 +25,7 @@ categories: Javascript XHR
 同源策略略微有些严格，如何破解？2种方式如下：
 
 1. 比如 doc.microsoft.com 和 msdn.microsoft.com 是 microsoft.com 下的两个域名，如果想互相进行资源共享访问，可以设置 这两个文档的 document.domain 属性   document.domain= "microsoft.com"  这样 这两个域名下的文档脚本可以互相访问另外的文档了。 
-2.CORS(cross original resource sharing ) 括号里文字我猜出来的，不一定准确。 需要设置一系列包括但不限于如下请求头：Access-Cotrol-Allow-Origin:"*"
+2. CORS(cross original resource sharing ) 括号里文字我猜出来的，不一定准确。 需要设置一系列包括但不限于如下请求头：Access-Cotrol-Allow-Origin:"*"
 如果需要跨域传递登陆信息 还要带上 withConfidential 属性  服务器和客户端都要进行设置。 
 
 
