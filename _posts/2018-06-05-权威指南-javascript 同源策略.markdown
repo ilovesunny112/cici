@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Javascript 同源策略"
-date:   2018-06-05 16:43:02 +0800
+date:   2018-06-05 17:14:02 +0800
 categories: Javascript XHR
 ---
 # Javascript 权威指南 同源策略
