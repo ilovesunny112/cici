@@ -22,7 +22,6 @@ http://siteA/default.aspx?name=%3Cscript src=siteb/evil.js%3E%3C/script%3E
 <script>
     str = str.replace(/</g,"&lt;").replace(/>/g,"&gt;")
     // 这可以移除掉 两端的尖括号
-
 </script>
 ```
 BTW，楼主 10年做的网站前被某机构扫描出了 XSS 漏洞，当时没办法 限制了 参数字符串长度 也算是蒙着解决了问题。
