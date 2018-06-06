@@ -1,0 +1,168 @@
+---
+layout: post
+title:  "Javascript 事件处理 第一部分"
+date:   2018-06-06 16:11:02 +0800
+categories: Javascript event
+---
+# Javascript 权威指南 事件处理 第一部分
+**处理程序的作用域**
+待补充
+
+**事件处理程序的返回值** 
+
+	return false;
+
+	代表可以阻止这个事件相关默认的操作
+
+**事件处理程序的调用顺序**
+
+	onclick 这种最先调用 
+	addEventListener 注册的按照注册顺序调用
+	attachEvent 可按照任何顺序调用，所以代码不要依赖调用顺序
+
+**事件传播**
+	当事件目标是 文档 或者 文档元素 的时候，情况比较复杂。 
+	发生在文档身上的事件大部分会冒泡，除了个别例外:focus,blur,scroll 等。 文档元素的 load 也会冒泡只不过到 document为止了。 
+	
+	据说，冒泡是事件处理的第三个阶段。第二个阶段是 事件在对象本身处理程序调用。 第一个阶段则是事件捕获。
+	ele.addEventListener(event,handler,true) 
+	注意第三个 参数 true 说明这个事件处理程序被注册为 捕获事件处理程序。 会在事件传播的第一个时间段调用。 
+
+
+	**关于时间传播的顺序可见下面的例子**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    *{
+        padding: 40px
+    }
+
+    #outer{
+        background-color: rgb(5, 107, 5);
+    }
+    .left{
+        background-color: rgb(150, 14, 14);
+        height: 500px;
+    }
+    ul{
+        background-color:purple;
+        height: 200px;
+    }
+    li{
+        background-color: orange;
+        cursor: pointer
+    }
+
+
+    </style>
+    
+</head>
+<body>
+    <div id="outer">
+        <div class="left">
+            <ul>
+                <li>事件发起源</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        var i = 1;
+        var oDiv = document.getElementById("outer"),
+            leftDiv = document.getElementsByClassName("left")[0],
+            oUl = document.getElementsByTagName("ul")[0],
+            oLi = document.getElementsByTagName("li")[0];
+
+        // 写通用事件handler
+        function handler(e,statusStr){
+            var e = e || window.event;
+            console.log(new Date().getTime())
+            var that = e.currentTarget
+            window.setTimeout(function(){
+                console.log("updating color")
+                var color = window.getComputedStyle(that).backgroundColor;
+                console.log(color)
+                // rgb(5, 107, 5)
+                color = color.replace(/rgb\((\d+)\,\s(\d+)\,\s(\d+)\)/,"rgb($3, $1, $2)")
+                that.style.backgroundColor = color
+            },i++*600)
+            if(e.target === e.currentTarget){
+                return console.log("事件本体执行")
+            }
+            return console.log('阶段是 ' + statusStr + " 事件源是 " + e.currentTarget.tagName)
+        }
+
+        // 先注册冒泡事件
+
+        oDiv.addEventListener("click",function(e){
+            handler(e,"冒泡回去")
+        })
+        leftDiv.addEventListener("click",function(e){
+            handler(e,"冒泡回去")
+        })
+        oUl.addEventListener("click",function(e){
+            handler(e,"冒泡回去")
+        })
+        oLi.addEventListener("click",function(e){
+            handler(e,"冒泡回去")
+        })
+
+
+        //    注册捕获事件
+
+        oDiv.addEventListener("click",function(e){
+            handler(e,"捕获")
+        },true)
+        leftDiv.addEventListener("click",function(e){
+            handler(e,"捕获")
+        },true)
+        oUl.addEventListener("click",function(e){
+            handler(e,"捕获")
+        },true)
+        oLi.addEventListener("click",function(e){
+            handler(e,"捕获")
+        },true)
+
+
+         
+    </script>
+</body>
+</html>
+
+```
+
+
+**事件阻止默认行为**
+
+```js
+	function cancelHander(event){
+		var event = event||window.event;
+		if(event.preventDefault) event.preventDefault();//普通浏览器
+		if(event.returnValue) event.returnValue = false;//针对 IE
+		return false; //用于处理使用对象属性 注册的事件处理程序 onclick="hanlder"
+	}
+
+```
+待续...
+
+
+
+
+
+ 
+
+ 
+
+
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
