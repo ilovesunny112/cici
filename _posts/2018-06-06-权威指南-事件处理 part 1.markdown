@@ -23,7 +23,6 @@ categories: Javascript event
 **事件传播**
 	当事件目标是 文档 或者 文档元素 的时候，情况比较复杂。 
 	发生在文档身上的事件大部分会冒泡，除了个别例外:focus,blur,scroll 等。 文档元素的 load 也会冒泡只不过到 document为止了。 
-	
 	据说，冒泡是事件处理的第三个阶段。第二个阶段是 事件在对象本身处理程序调用。 第一个阶段则是事件捕获。
 	ele.addEventListener(event,handler,true) 
 	注意第三个 参数 true 说明这个事件处理程序被注册为 捕获事件处理程序。 会在事件传播的第一个时间段调用。 
