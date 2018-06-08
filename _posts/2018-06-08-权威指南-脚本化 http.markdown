@@ -1,0 +1,391 @@
+---
+layout: post
+title:  "Javascript 脚本化 HTTP"
+date:   2018-06-08 16:36:02 +0800
+categories: Javascript xhr
+---
+# Javascript 权威指南 脚本化 HTTP
+
+废话少说，翠花！上代码： 
+
+BTW， 了解到了 a 元素还有很多有趣的属性 
+
+```js
+// 同步获取文本
+
+    function getTextSync(url,callback){
+        var xhr = new XMLHttpRequest()
+        xhr.open(url,false);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200 && callback){
+                callback(xhr.responseText)
+            }
+        }
+        xhr.send(null)
+    }
+
+
+    // 解析 http 响应
+    // 发起 get 请求 以获取指定url 内容。 
+    // 获取后解析对象类型 
+    // 根据不同类型 传递给 回调函数
+    
+    function get(url,callback){
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET",url,true)
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200 && callback){
+                var type = xhr.getResponseHeader("Content-Type");
+                if(type.indexOf("xml") !== -1 && xhr.responseXML){
+                    callback(xhr.responseXML)
+                }
+                else if(type =="application/json"){
+                    callback(JSON.parse(xhr.responseText))
+                }
+                else{
+                    callback(xhr.responseText)
+                }
+            }
+        }
+        xhr.send(null)
+    }
+
+
+    // 为了 HTTP 请求 讲对象 编码 
+
+    function encodeFormData(data){
+        if(!data) return "";
+        var pairs = [];
+        for(var key in data){
+            if(!data.hasOwnProperty(key)) continue;
+            if(typeof data[key] == "function") continue;
+
+            var value = data[key]
+
+            key = encodeURIComponent(key.replace("%20","+"));
+            value = encodeURIComponent(value.replace("%20","+"))
+
+            pairs.push(key+"="+value)
+        }
+        return paris.join("&")
+    }
+
+    // 使用表单编码 post 一个请求 
+
+    function postData(url,data,callback){
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST",url);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200 && callback){
+                callback(xhr.responseText)
+            }
+        }
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+        xhr.send(encodeFormData(data))
+    }
+
+    // 使用 表单编码 发起 get 请求
+
+    function getData(url,data,callback){
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET",url + "?" + encodeFormData(data))
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200 && callback){
+                callback(xhr.responseText)
+            }
+        }
+        xhr.send(null)
+    }
+
+
+    // 发送 json post 请求 
+    function postJSON(url,data,callback){
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST",url)
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200 && callback){
+                callback(xhr.responseText)
+            } 
+        }
+
+        xhr.setRequestHeader("Content-Type","application/json")
+        xhr.send(JSON.stringify(data))
+
+    }
+
+    // 上传文件 
+    window.addEventListener("load",function(){
+        var elts = document.getElementsByTagName("input")
+        for(var i = 0 ; i < elts.length ; i++){
+            var input = elts[i]
+            if(input.type !== "file") continue;
+            var url = input.getAttribute("data-uploadto")
+            if(!url) continue;
+
+            input.addEventListener("change",function(){
+                var file = this.files[0];
+                var xhr = new XMLHttpRequest()
+                xhr.open("POST",url)
+                xhr.send(file)
+                
+
+            },false)//不冒泡
+        }
+    })
+
+    // 上传文件是 二进制大对象 Blob 的子集 这里不需要显示的设置 contenttype 头 
+
+
+
+    // multipart/form-data 请求
+
+    // 如果不止 文件上传 的时候 需要用到这种类型  Formdata 每条新的项 可以 append 进去。 
+
+    function postFormData(url,data,callback){
+        if(typeof FormData == "undefined")
+            throw new Error("Formdata is not implemented")
+
+        var xhr = new XMLHttpRequest()
+        var formdata = new FormData()
+        xhr.open("POST",url)
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                callback(xhr)
+            }
+        }
+        for(var key in data){
+            if(!data.hasOwnProperty(key)) continue;
+            if(typeof data[key] =="function") continue;
+
+            formdata.append(key,data[key])
+        }
+
+        xhr.setRequestHeader("Content-Type","multipart/form-data")
+        xhr.send(formdata)
+    }
+
+
+
+    // http 进度事件
+
+    if("onprogress" in new XMLHttpRequest){
+        // 支持 progess事件
+
+        var xhr = new XMLHttpRequest()
+
+        xhr.open("POST","SOME URL")
+        xhr.onprogress = function(e){
+            // 这里 如果 e.lengthComputable 已知 那么 e.total 是整体长度 反之，e.total 是 0 
+            if(e.lengthComputable){
+                console.log(e.loaded/e.total)
+            }
+        }
+    }
+
+    
+
+    // 上传进度事件
+
+    window.addEventListener("load",function(){
+        var elts = document.getElementsByTagName("input");
+        for(var i = 0 ; i < elts.length; i++){
+            var target = elts[i];
+            var url = target.getAttribute("data-uploadto")
+            if(!url) continue;
+            createFileUploadDropTarget(target,url)
+        }
+
+        function createFileUploadDropTarget(target,url){
+            var uploading = false;
+            console.log(target,url)
+
+            target.ondragenter = function(e){
+                console.log("dragenter")
+                if(uploading) return;
+                var types = e.dataTransfer.types;
+                if(types && 
+                    ((types.contains && types.contains("Files")) ||
+                        (types.indexOf && types.indexOf("Files") !== -1)
+                    
+                    
+                    )
+                    ){
+                        target.classList.add("wantdrop")
+                        return false
+                    }
+            }
+
+            target.ondragover = function(e){
+                if(!uploading) return false;
+            }
+
+            target.ondragleave = function(e){
+                if(!uploading) target.classList.remove("wantdrop")
+            }
+
+            target.ondrop = function(e){
+                if(uploading) return false;
+                var files = e.dataTransfer.files;
+                if(files && files.length){
+                    uploading = true;
+                    var message = "uploading files:<ul>"
+
+                    for(var i = 0 ; i < files.length; i++){
+                        message += "<li>" + files[i].name + "</li>"
+                    }
+
+                    message += "</ul>"
+                }
+
+                target.innerHTML = message
+                target.classList.remove("wantdrop")
+                target.classList.add("uploading")
+
+                var xhr = new XMLHttpRequest()
+
+                xhr.open("POST",url)
+                var body = new FormData()
+
+                for(var i = 0; i < files.length; i++){
+                    body.append(i,files[i])
+                }
+
+                xhr.upload.onprogress = function(e){
+                    if(e.lengthComputable){
+                        console.log(e.loaded/e.total)
+                    }
+                }
+
+                xhr.upload.onload = function(e){
+                    uploding = false
+                    target.classList.remove("uploading")
+                    target.innerHTML = "drop files to upload"
+                }
+
+                xhr.send(body)
+
+                return false;
+
+            }
+
+            target.classList.remove("wantdrop")
+        }
+    })
+
+
+    // 实现超时 的限制  利用 abort 方法 
+
+    function timedGetText(url,timeout,callback){
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET",url)
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                callback(xhr.responseText)
+            }
+            
+        }   
+        var timer = window.setTimeout(function(){
+            xhr.abort()
+            window.clearTimeout(timer)
+            timer = null
+        },timeout)
+
+        xhr.send(null)
+
+
+    }
+
+
+    // 跨域 HTTP 请求
+
+    // 同源策略的补充
+
+    // CROS
+
+    // 跨域的安全细节 
+    // 如果 传递 用户名和 密码  不要用跨域 这样 分布式破解 成为可能
+    // cookie HTTP 身份验证令牌（token） 通常不会作为请求的内容部分发送 且 任何作为跨域响应来接收的 cookie 都会被丢弃
+    // 如果跨域需要这几种凭证，那么在发送之前 设置 请求的 withConfidentials 属性 为 true
+
+
+    window.addEventListener("load",function(){
+        var supportCORS = (new XMLHttpRequest().withCredentials !== undefined)
+
+        var links = document.getElementsByTagName("a")
+        for(var i = 0 ; i < links.length; i++){
+            var link = links[i]
+            if(!link.href || link.href.indexOf("javascript:")!==-1) continue
+            if(link.title) continue
+            if(link.host !== localtion.host || link.protocol !== localtion.protocol) {
+                link.title = "站外链接"
+                if(!supportCORS) continue
+
+            }
+
+            if(link.addEventListener){
+                link.addEventListener("mouseover",mouseoverHandler,false)
+            }
+            else{
+                link.attachEvent("onmouseover",mouseoverHandler)
+            }
+        }
+
+        function mouseoverHandler(e){
+            var ev = e || window.event;
+
+            var link = ev.target || ev.srcElement;
+            var url = link.href;
+
+            var xhr = new XMLHttpRequest()
+
+            xhr.open("HEAD",url)
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    var type = xhr.getResponseHeader("Content-Type");
+                    var size = xhr.getResponseHeader("Content-Length");
+                    var date = xhr.getResponseHeader("Last-Modified");
+
+                    link.title += "类型: " + type + "\n " + "size: " + size + "\n modified at:" + date
+                }
+
+                else{
+                    if(!link.title){
+                        link.title  = "Couldn't fetch details "
+                    }
+                }
+            }
+
+            xhr.send(null)
+
+
+            if(link.removeEventListener){
+                link.removeEventListener("mouseover",mouseoverHandler,false)
+            }
+            else{
+                link.detachEvent("onmouseover",mouseoverHandler)
+            }
+        }
+    })
+
+
+    // 上面这个例子 原来  a 元素有那么多属性  a.href a.title a.host 居然！！ 包括 a.protocol 当然也会有 a.port
+
+
+
+```
+
+待续...
+
+
+
+
+
+ 
+
+ 
+
+
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
