@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Javascript 脚本化 HTTP jsonp 的实现"
-date:   2018-06-08 16:36:02 +0800
-categories: Javascript xhr
+date:   2018-06-08 17:23:02 +0800
+categories: Javascript jsonp
 ---
 # Javascript 权威指南 脚本化 HTTP jsonp
 
