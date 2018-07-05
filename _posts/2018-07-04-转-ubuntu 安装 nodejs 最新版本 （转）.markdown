@@ -14,7 +14,7 @@ nodejs 已经更新到 了 10.多的版本。 ubuntu的自身版本比较低
 ``` 
 sudo apt-get update
 sudo apt-get install -y python-software-properties softerware-properties-common
-sudo add-apt-registory ppa:chris-lea/node.js
+sudo add-apt-repository ppa:chris-lea/node.js
 sudo apt-get update
 ```
 
