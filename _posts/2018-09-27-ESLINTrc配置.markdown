@@ -6,7 +6,7 @@ categories: eslint javascript quality control
 ---
 # eslintrc 常规用法
 
-···javascript
+```javascript
 
     {
         // 环境定义了预定义的全局变量。
@@ -572,7 +572,7 @@ categories: eslint javascript quality control
         }
     }
 
-···
+```
 
 
 [jekyll-docs]: https://jekyllrb.com/docs/home
