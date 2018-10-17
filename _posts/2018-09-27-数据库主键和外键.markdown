@@ -1,6 +1,7 @@
 ---
 layout: post
-title:  "eslintrc"
+title:  "数据库的主键和外键
+"
 date:   2018-10-17 10:36:02 +0800
 categories: sql sequelize FK
 ---
